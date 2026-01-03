@@ -48,7 +48,7 @@ export const renderBudgetChart = (canvasElement, stops) => {
                 title: {
                     display: true,
                     text: 'Expenses by City',
-                    color: '#f8fafc',
+                    color: '#1e293b',
                     font: {
                         size: 16
                     }

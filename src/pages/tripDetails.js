@@ -75,9 +75,12 @@ export const TripDetails = (user, params) => {
     </div>
 
     <!-- Add Stop Modal -->
-    <div id="add-stop-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center;">
+    <div id="add-stop-modal" class="modal-overlay">
        <div class="card" style="width: 100%; max-width: 500px;">
-          <h3>Add a Stop</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h3 style="margin: 0;">Add a Stop</h3>
+              <button class="btn btn-secondary close-modal" style="padding: 0.2rem 0.6rem; font-size: 1.2rem; line-height: 1;">&times;</button>
+          </div>
           <form id="add-stop-form">
             <input type="text" id="stop-city" placeholder="City Name" required />
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -93,7 +96,6 @@ export const TripDetails = (user, params) => {
               </div>
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;">
-               <button type="button" class="btn btn-secondary close-modal">Cancel</button>
                <button type="submit" class="btn">Add Stop</button>
             </div>
           </form>
@@ -101,9 +103,12 @@ export const TripDetails = (user, params) => {
     </div>
 
     <!-- Add Activity Modal -->
-    <div id="add-activity-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center;">
+    <div id="add-activity-modal" class="modal-overlay">
        <div class="card" style="width: 100%; max-width: 500px;">
-          <h3>Add Activity</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h3 style="margin: 0;">Add Activity</h3>
+              <button class="btn btn-secondary close-modal" style="padding: 0.2rem 0.6rem; font-size: 1.2rem; line-height: 1;">&times;</button>
+          </div>
           <p id="activity-stop-name" style="color: var(--text-muted); margin-bottom: 1rem;"></p>
           <form id="add-activity-form">
             <input type="text" id="activity-name" placeholder="Activity Name (e.g. Louvre Museum)" required />
@@ -118,7 +123,6 @@ export const TripDetails = (user, params) => {
             <input type="number" id="activity-cost" placeholder="Cost (₹)" min="0" step="0.01" />
             
             <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;">
-               <button type="button" class="btn btn-secondary close-modal">Cancel</button>
                <button type="submit" class="btn">Add Activity</button>
             </div>
           </form>
@@ -126,7 +130,7 @@ export const TripDetails = (user, params) => {
     </div>
 
     <!-- Budget Modal -->
-    <div id="budget-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center;">
+    <div id="budget-modal" class="modal-overlay">
        <div class="card" style="width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
              <h3>Budget Breakdown</h3>
@@ -141,7 +145,7 @@ export const TripDetails = (user, params) => {
        </div>
     </div>
      <!-- Calendar Modal -->
-    <div id="calendar-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center;">
+    <div id="calendar-modal" class="modal-overlay">
        <div class="card" style="width: 100%; max-width: 900px;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
              <h3>Trip Timeline</h3>
@@ -175,19 +179,16 @@ export const TripDetails = (user, params) => {
   // Close buttons
   container.querySelectorAll('.close-modal').forEach(btn => {
     btn.onclick = () => {
-      stopModal.style.display = 'none';
-      activityModal.style.display = 'none';
-      budgetModal.style.display = 'none';
-      if (calendarModal) calendarModal.style.display = 'none';
+      container.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
     };
   });
 
-  addStopBtn.onclick = () => { stopModal.style.display = 'flex'; };
+  addStopBtn.onclick = () => { stopModal.classList.add('open'); };
 
   // Calendar Logic
   if (viewCalendarBtn) {
     viewCalendarBtn.onclick = () => {
-      calendarModal.style.display = 'flex';
+      calendarModal.classList.add('open');
       const calendarContainer = container.querySelector('#calendar-view');
       if (typeof renderCalendar === 'function') {
         renderCalendar(calendarContainer, currentTrip);
@@ -197,14 +198,7 @@ export const TripDetails = (user, params) => {
     };
   }
 
-  // Calendar Logic
-  if (viewCalendarBtn) {
-    viewCalendarBtn.onclick = () => {
-      calendarModal.style.display = 'flex';
-      const calendarContainer = container.querySelector('#calendar-view');
-      renderCalendar(calendarContainer, currentTrip);
-    };
-  }
+
 
   // Share Logic
   const shareBtn = container.querySelector('#share-btn');
@@ -230,7 +224,7 @@ export const TripDetails = (user, params) => {
 
   if (viewBudgetBtn) {
     viewBudgetBtn.onclick = () => {
-      budgetModal.style.display = 'flex';
+      budgetModal.classList.add('open');
       const canvas = container.querySelector('#budget-chart');
 
       requestAnimationFrame(() => {
@@ -382,7 +376,7 @@ export const TripDetails = (user, params) => {
       btn.onclick = (e) => {
         currentStopIndex = parseInt(e.target.dataset.index);
         container.querySelector('#activity-stop-name').textContent = `at ${e.target.dataset.city}`;
-        activityModal.style.display = 'flex';
+        activityModal.classList.add('open');
       };
     });
   };
@@ -447,7 +441,7 @@ export const TripDetails = (user, params) => {
       currentTrip.stops.push(newStop);
       renderStops(currentTrip.stops);
 
-      stopModal.style.display = 'none';
+      stopModal.classList.remove('open');
       addStopForm.reset();
     } catch (error) {
       console.error(error);
@@ -482,7 +476,7 @@ export const TripDetails = (user, params) => {
       currentTrip.budget = (currentTrip.budget || 0) + parseFloat(cost);
 
       renderStops(currentTrip.stops);
-      activityModal.style.display = 'none';
+      activityModal.classList.remove('open');
       addActivityForm.reset();
     } catch (error) {
       console.error(error);
